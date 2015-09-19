@@ -32,8 +32,7 @@ public class GameServer {
 	
 	public void run() throws Exception {
 		Configuration config = new Configuration();
-	    config.setHostname("localhost");
-	    config.setPort(80);
+	    config.setPort(3000);
 
 	    server = new SocketIOServer(config);
 		

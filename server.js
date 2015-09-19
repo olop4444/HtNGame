@@ -48,7 +48,7 @@ function addPlayer(socket) {
 }
 
 function processAction(socket, action) {
-  io.to(socket.roomId).emit("action", action);
+  io.to(socket.roomId).emit("receive action", action);
 }
 
 function removePlayer(socket) {
@@ -58,7 +58,7 @@ function removePlayer(socket) {
 
 io.on('connection', function (socket) {
   addPlayer(socket);
-  socket.on('event', function (data) {
+  socket.on('send action', function (data) {
 	processAction(socket,data);
   });
   socket.on('disconnect', function () {

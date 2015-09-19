@@ -99,16 +99,15 @@ function moveOutcome(playerNum, direction) {
 }
 
 function isComplete() {
-	endPositions.forEach(function (eposition) {
+	endPositions.forEach(function (endPosition) {
 		var found = false;
-		playerPosition.forEach(function (pposition) {
-			if(pposition == eposition) {
+		playerPositions.forEach(function (playerPosition) {
+			if(playerPosition == endPosition) {
 				found = true;
-				break;
 			}
-		}		
+		});		
 		if(!found) 
 			return false;
-	}
+	});
 	return true;
 }

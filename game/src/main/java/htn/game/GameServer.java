@@ -33,7 +33,7 @@ public class GameServer {
 	public void run() throws Exception {
 		Configuration config = new Configuration();
 	    config.setHostname("localhost");
-	    config.setPort(8080);
+	    config.setPort(80);
 
 	    server = new SocketIOServer(config);
 		

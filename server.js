@@ -46,7 +46,7 @@ function addPlayer(socket) {
 
 function processAction(socket, action) {
   io.to(socket.roomId).emit("action", action);
-}
+} 
 
 function removePlayer(socket) {
   io.to(socketsToRooms[socket]).emit('dc');
@@ -56,9 +56,8 @@ function removePlayer(socket) {
 io.on('connection', function (socket) {
   addPlayer(socket);
   socket.emit('news', "welcome");
-  socket.on('event', function (data) {
-    console.log(data);
-    console.log(socket.cocacola);
+  socket.on('action', function (data) {
+    processAction(socket, data);
   });
   socket.on('disconnect', function () {
     removePlayer(socket);

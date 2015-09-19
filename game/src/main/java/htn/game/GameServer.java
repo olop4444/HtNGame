@@ -16,27 +16,27 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 public class GameServer {
 	private SocketIOServer server;
 	private Class<String> eventClass;
-	private HashMap<SocketAddress,Room> clientRoomMap;
+	private HashMap<SocketAddress, Room> clientRoomMap;
 	private SocketIOClient waitingClient;
-	
+
 	public GameServer() {
-		clientRoomMap = new HashMap<SocketAddress,Room>();
+		clientRoomMap = new HashMap<SocketAddress, Room>();
 		waitingClient = null;
-		//BroadcastOperations bo = server.getRoomOperations("asdf");
+		// BroadcastOperations bo = server.getRoomOperations("asdf");
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		GameServer connector = new GameServer();
 		connector.run();
 	}
-	
+
 	public void run() throws Exception {
 		Configuration config = new Configuration();
-	    config.setPort(3000);
-	    config.setAllowCustomRequests(true);
+		config.setPort(3333);
+		config.setAllowCustomRequests(true);
 
-	    server = new SocketIOServer(config);
-		
+		server = new SocketIOServer(config);
+
 		server.addConnectListener(new ConnectListener() {
 
 			// @Override
@@ -46,34 +46,36 @@ public class GameServer {
 			}
 
 		});
-		
+
 		server.addDisconnectListener(new DisconnectListener() {
-			
+
 			public void onDisconnect(SocketIOClient client) {
 				System.out.println("disconnected");
 				removePlayer(client);
 			}
-		
+
 		});
-		
-		server.addEventListener("Player Action", eventClass, new DataListener<String>() {
-			
-			public void onData(SocketIOClient client, String data, AckRequest ackRequest) {
-				System.out.println(data);
-				processAction(client, data);
-			}
-		});
-		
+
+		server.addEventListener("Player Action", eventClass,
+				new DataListener<String>() {
+
+					public void onData(SocketIOClient client, String data,
+							AckRequest ackRequest) {
+						System.out.println(data);
+						processAction(client, data);
+					}
+				});
+
 		server.start();
 	}
-	
+
 	private synchronized void processAction(SocketIOClient client, String data) {
 		Room room = clientRoomMap.get(client.getRemoteAddress());
 		room.messageAll("Action", data);
 	}
-	
+
 	private synchronized void addPlayer(SocketIOClient client) {
-		if(waitingClient == null)
+		if (waitingClient == null)
 			waitingClient = client;
 		else {
 			Room room = new Room();
@@ -85,17 +87,17 @@ public class GameServer {
 			waitingClient = null;
 		}
 	}
-	
+
 	private synchronized void removePlayer(SocketIOClient client) {
 		Room room = clientRoomMap.get(client.getRemoteAddress());
-		if(room != null) {
+		if (room != null) {
 			room.messageAll("Disconnect", "Player has disconnected.");
-			for(SocketIOClient sic : room.clients) {
+			for (SocketIOClient sic : room.clients) {
 				clientRoomMap.remove(sic);
 			}
 		}
 	}
-	
+
 	private JSONObject createGame() {
 		return null;
 	}

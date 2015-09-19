@@ -13,7 +13,7 @@ var serveStatic = require('serve-static');
 
 app.listen(80);
 
-var serve = serveStatic(__dirname + "/static/");
+var serve = serveStatic(__dirname + "/../client/");
 
 function handler(request, response) {
   var done = finalhandler(request, response);
@@ -28,7 +28,7 @@ function addPlayer(socket) {
   waitingSockets.push(socket);
 
   if (waitingSockets.length >= MAX_ROOM_SIZE) {
-	var i = 0;
+	  var i = 0;
     waitingSockets.forEach(function (socket) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
@@ -40,29 +40,31 @@ function addPlayer(socket) {
       }
 	  socket.emit("player number", i);
     });
-	var map = {"width" : 16,
- "height" : 15,
- "A_start" : [14,13],
- "B_start" : [14,12],
- "end_points" : [ [14,7], [9,6] ],
- "min_moves" : 7,
- "cells" : [ ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", "W"],
-             ["W", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
-             ["W", "W", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", " ", " ", " ", "W", " ", " ", " ", "W", " ", " ", " ", " ", "W"],
-             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
-             ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", "W"],
-             ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W"]]};
+  	var map = {
+      "width" : 16,
+      "height" : 15,
+      "A_start" : [14,13],
+      "B_start" : [14,12],
+      "end_points" : [ [14,7], [9,6] ],
+      "min_moves" : 7,
+      "cells" : 
+      [ ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", "W"],
+        ["W", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+        ["W", "W", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", " ", " ", " ", "W", " ", " ", " ", "W", " ", " ", " ", " ", "W"],
+        ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+        ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", "W"],
+        ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W"]]};
 
-	io.to(nextRoomId).emit("map",map);
+	  io.to(nextRoomId).emit("map", map);
     nextRoomId++;
     waitingSockets = [];
   }
@@ -73,7 +75,7 @@ function processAction(socket, action) {
 } 
 
 function removePlayer(socket) {
-  io.to(socketsToRooms[socket]).emit('dc',socket.playerId);
+  io.to(socketsToRooms[socket]).emit('dc', socket.playerId);
   roomSockets[socket.roomId] = null;
 }
 

@@ -1,4 +1,4 @@
-// main.js
+// render.js
 //  -- setting up canvas
 
 // Pixi JS renderer instance
@@ -7,15 +7,19 @@ var renderer = PIXI.autoDetectRenderer(800, 600);
 // Add renderer into DOM tree
 document.body.appendChild(renderer.view);
 
-var stage = new PIXI.Stage(0x66FF99);
+var stage = new PIXI.container();
 
-requestAnimationFrame(animate);
+var container
 
-function animate() {
-	requestAnimationFrame(animate);
+// requestAnimationFrame(animate);
 
-	// console.log('animate ran');
+// function animate() {
+// 	requestAnimationFrame(animate);
 
-	// render the stage
-	renderer.render(stage);
-}
+// 	// console.log('animate ran');
+
+// 	// render the stage
+// 	renderer.render(stage);
+// }
+
+// Draw Base

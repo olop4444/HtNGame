@@ -40,15 +40,36 @@ function addPlayer(socket) {
       }
 	  socket.emit("player number", i);
     });
+	var map = {"width" : 16,
+ "height" : 15,
+ "A_start" : [14,13],
+ "B_start" : [14,12],
+ "end_points" : [ [14,7], [9,6] ],
+ "min_moves" : 7,
+ "cells" : [ ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", "W"],
+             ["W", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+             ["W", "W", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", " ", "W", " ", " ", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", " ", " ", " ", "W", " ", " ", " ", "W", " ", " ", " ", " ", "W"],
+             ["W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W"],
+             ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", "W"],
+             ["W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W"]]};
+
+	io.to(nextRoomId).emit("map",map);
     nextRoomId++;
     waitingSockets = [];
   }
-
-  // TODO get game and send to room.
 }
 
 function processAction(socket, action) {
-  io.to(socket.roomId).emit("action", action);
+  io.to(socket.roomId).emit("receive action", action);
 } 
 
 function removePlayer(socket) {
@@ -58,10 +79,13 @@ function removePlayer(socket) {
 
 io.on('connection', function (socket) {
   addPlayer(socket);
-  socket.on('action', function (data) {
-    processAction(socket, data);
+  socket.on('send action', function (data) {
+	processAction(socket,data);
   });
   socket.on('disconnect', function () {
     removePlayer(socket);
+  });
+  socket.on('victory', function () {
+	console.log("YAY");
   });
 });

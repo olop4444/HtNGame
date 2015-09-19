@@ -28,6 +28,7 @@ function addPlayer(socket) {
   waitingSockets.push(socket);
 
   if (waitingSockets.length >= MAX_ROOM_SIZE) {
+	var i = 0;
     waitingSockets.forEach(function (socket) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
@@ -36,6 +37,7 @@ function addPlayer(socket) {
       } else {
         roomSockets[nextRoomId].push(socket);
       }
+	  socket.emit("player number", i++);
     });
     nextRoomId++;
     waitingSockets = [];
@@ -55,7 +57,6 @@ function removePlayer(socket) {
 
 io.on('connection', function (socket) {
   addPlayer(socket);
-  socket.emit('news', "welcome");
   socket.on('action', function (data) {
     processAction(socket, data);
   });

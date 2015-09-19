@@ -31,10 +31,7 @@
       <artifactId>netty-socketio</artifactId>
       <version>1.7.6</version>
     </dependency>
-    <properties>
-		<slf4jVersion>1.6.1</slf4jVersion>
-	</properties>	
-        <dependency>
+    <dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
 		<version>1.6.1</version>

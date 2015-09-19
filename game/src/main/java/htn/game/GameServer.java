@@ -33,6 +33,7 @@ public class GameServer {
 	public void run() throws Exception {
 		Configuration config = new Configuration();
 	    config.setPort(3000);
+	    config.setAllowCustomRequests(true);
 
 	    server = new SocketIOServer(config);
 		
@@ -87,9 +88,11 @@ public class GameServer {
 	
 	private synchronized void removePlayer(SocketIOClient client) {
 		Room room = clientRoomMap.get(client.getRemoteAddress());
-		room.messageAll("Disconnect", "Player has disconnected.");
-		for(SocketIOClient sic : room.clients) {
-			clientRoomMap.remove(sic);
+		if(room != null) {
+			room.messageAll("Disconnect", "Player has disconnected.");
+			for(SocketIOClient sic : room.clients) {
+				clientRoomMap.remove(sic);
+			}
 		}
 	}
 	

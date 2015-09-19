@@ -32,12 +32,13 @@ function addPlayer(socket) {
     waitingSockets.forEach(function (socket) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
+	  socket.playerId = i++;
       if (roomSockets[nextRoomId] == null) {
         roomSockets[nextRoomId] = [socket];
       } else {
         roomSockets[nextRoomId].push(socket);
       }
-	  socket.emit("player number",i++);
+	  socket.emit("player number",i);
     });
     nextRoomId++;
     waitingSockets = [];
@@ -51,7 +52,7 @@ function processAction(socket, action) {
 }
 
 function removePlayer(socket) {
-  io.to(socketsToRooms[socket]).emit('dc');
+  io.to(socketsToRooms[socket]).emit('dc',socket.playerId);
   roomSockets[socket.roomId] = null;
 }
 

@@ -1,3 +1,9 @@
+var MAX_ROOM_SIZE = 2;
+
+
+// -------
+
+
 var app = require('http').createServer(handler);
 var io = require('socket.io')(app);
 var fs = require('fs');
@@ -14,9 +20,47 @@ function handler(request, response) {
   serve(request, response, done);
 }
 
+var roomSockets = {};
+var waitingSockets = [];
+var nextRoomId = 1;
+
+function addPlayer(socket) {
+  waitingSockets.push(socket);
+
+  if (waitingSockets.length >= MAX_ROOM_SIZE) {
+    waitingSockets.forEach(function (socket) {
+      socket.join(nextRoomId);
+      socket.roomId = nextRoomId;
+      if (roomSockets[nextRoomId] == null) {
+        roomSockets[nextRoomId] = [socket];
+      } else {
+        roomSockets[nextRoomId].push(socket);
+      }
+    });
+    nextRoomId++;
+    waitingSockets = [];
+  }
+
+  // TODO get game and send to room.
+}
+
+function processAction(socket, action) {
+  io.to(socket.roomId).emit("action", action);
+}
+
+function removePlayer(socket) {
+  io.to(socketsToRooms[socket]).emit('dc');
+  roomSockets[socket.roomId] = null;
+}
+
 io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
+  addPlayer(socket);
+  socket.emit('news', "welcome");
+  socket.on('event', function (data) {
     console.log(data);
+    console.log(socket.cocacola);
+  });
+  socket.on('disconnect', function () {
+    removePlayer(socket);
   });
 });

@@ -38,7 +38,7 @@ function addPlayer(socket) {
       } else {
         roomSockets[nextRoomId].push(socket);
       }
-	  socket.emit("player number",i);
+	  socket.emit("player number", i);
     });
     nextRoomId++;
     waitingSockets = [];
@@ -49,7 +49,7 @@ function addPlayer(socket) {
 
 function processAction(socket, action) {
   io.to(socket.roomId).emit("receive action", action);
-}
+} 
 
 function removePlayer(socket) {
   io.to(socketsToRooms[socket]).emit('dc',socket.playerId);

@@ -3,6 +3,7 @@ package htn.game;
 import java.util.HashMap;
 
 import com.corundumstudio.socketio.AckRequest;
+import com.corundumstudio.socketio.BroadcastOperations;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -19,6 +20,7 @@ public class GameServer {
 	public GameServer() {
 		clientRoomMap = new HashMap<SocketIOClient,Room>();
 		waitingClient = null;
+		//BroadcastOperations bo = server.getRoomOperations("asdf");
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -56,6 +58,8 @@ public class GameServer {
 				processAction(client, data);
 			}
 		});
+		
+		server.start();
 	}
 	
 	private void processAction(SocketIOClient client, String data) {
@@ -67,7 +71,9 @@ public class GameServer {
 		if(waitingClient == null)
 			waitingClient = client;
 		else {
-			Room room = new Room(waitingClient,client);
+			Room room = new Room();
+			room.addClient(waitingClient);
+			room.addClient(client);
 			clientRoomMap.put(waitingClient, room);
 			clientRoomMap.put(client, room);
 			room.messageAll("Game created", "insert game here");
@@ -78,7 +84,8 @@ public class GameServer {
 	private void removePlayer(SocketIOClient client) {
 		Room room = clientRoomMap.get(client);
 		room.messageAll("Disconnect", "Player has disconnected.");
-		clientRoomMap.remove(client);
-		clientRoomMap.remove(room.client2);
+		for(SocketIOClient sic : room.clients) {
+			clientRoomMap.remove(sic);
+		}
 	}
 }

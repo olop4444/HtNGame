@@ -1,5 +1,7 @@
 package htn.game;
 
+import java.util.ArrayList;
+
 import com.corundumstudio.socketio.SocketIOClient;
 
 /**
@@ -8,16 +10,27 @@ import com.corundumstudio.socketio.SocketIOClient;
  */
 public class Room 
 {
-    public SocketIOClient client1;
-    public SocketIOClient client2;
+    public ArrayList<SocketIOClient> clients;
     
-    public Room(SocketIOClient client1, SocketIOClient client2) {
-    	this.client1 = client1;
-    	this.client2 = client2;
+    public Room() {
+    	clients = new ArrayList<SocketIOClient>();
+    }
+    
+    public Room(ArrayList<SocketIOClient> clients) {
+    	this.clients = clients;
+    }
+    
+    public void addClient(SocketIOClient client) {
+    	clients.add(client);
+    }
+    
+    public void removeClient(SocketIOClient client) {
+    	clients.remove(client);
     }
     
     public void messageAll(String event, String data) {
-    	client1.sendEvent(event, data);
-    	client2.sendEvent(event, data);
+    	for (SocketIOClient client : clients) {
+    		client.sendEvent(event, data);
+    	}
     }
 }

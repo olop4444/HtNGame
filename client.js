@@ -3,22 +3,30 @@ var socket = io();
 
 var playerNumber;
 var canMove = true;
+var playerPositions;
+var endPositions;
+var cells;
 
 socket.on("player number", function(num) {
 	playerNumber = num;
 });
 
 socket.on("map", function(map) {
-	//make map
+	var width = map.width;
+	var height = map.height;
+	playerPositions = [map.A_start, map.B_start];
+	endPositions = map.end_points;
+	cells = map.cells;
 });
 
 socket.on("receive action", function(action) {
-	//do action
+	move(action.playerNum, action.direction);
 	canMove = true;
 });
 
 socket.on("dc", function(playerId) {
 	//"player playerId has disconnected"
+	socket.disconnect();
 });
 
 document.onkeydown = checkKey;
@@ -44,9 +52,60 @@ function checkKey(e) {
 		}
 		
 		var action = {};
-		action["player"] = playerNumber;
+		action["playerNum"] = playerNumber;
 		action["direction"] = dir;
 
-		socket.emit('send action', action);
+		socket.emit("send action", action);
 	}
+}
+
+function move(playerNum, direction) {
+	var landingPosition = moveOutcome(playerNum,direction);
+	
+	//do animations?
+	playerPositions[playerNum] = landingPosition;
+	
+	//check for victory
+	if (isComplete()) {
+		socket.emit("victory");
+	}
+}
+
+function moveOutcome(playerNum, direction) {
+	var currentPosition = playerPositions[playerNum];
+	
+	if(direction == 'u') {
+		while(cells[currentPosition[0]][currentPosition[1]-1] != "W") {
+			currentPosition[1] -= 1;
+		}
+	} else if (direction == 'd') {
+		while(cells[currentPosition[0]][currentPosition[1]+1] != "W") {
+			currentPosition[1] += 1;
+		}
+	} else if (direction == 'l') {
+		while(cells[currentPosition[0]-1][currentPosition[1]] != "W") {
+			currentPosition[0] -= 1;
+		}
+	} else if (direction == 'r') {
+		while(cells[currentPosition[0]+1][currentPosition[1]] != "W") {
+			currentPosition[0] += 1;
+		}
+	}
+	
+	return currentPosition;
+}
+
+function isComplete() {
+	endPositions.forEach(function (eposition) {
+		var found = false;
+		playerPosition.forEach(function (pposition) {
+			if(pposition == eposition) {
+				found = true;
+				break;
+			}
+		}		
+		if(!found) 
+			return false;
+	}
+	return true;
 }

@@ -2,14 +2,21 @@
 //  -- setting up canvas
 
 // Pixi JS renderer instance
-var renderer = PIXI.autoDetectRenderer(800, 600);
+var renderer = PIXI.autoDetectRenderer(CANVAS_HEIGHT, CANVAS_WIDTH);
 
 // Add renderer into DOM tree
-document.body.appendChild(renderer.view);
+var containerk = document.getElementById('canvas-container');
+containerk.appendChild(renderer.view);
 
-var stage = new PIXI.container();
+// Set rendering stage
+var stage = new PIXI.Container();
 
-var container
+var terrain = new PIXI.Container(),
+	units = new PIXI.Container();
+
+stage.addChild(terrain);
+stage.addChild(units);
+
 
 // requestAnimationFrame(animate);
 
@@ -22,4 +29,4 @@ var container
 // 	renderer.render(stage);
 // }
 
-// Draw Base
+// Draw Terrain

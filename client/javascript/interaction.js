@@ -1,11 +1,12 @@
-	
+// interaction.js
+// -- client-side of Socket.io
+
 var socket = io();
 
 var playerNumber;
 var canMove = true;
-var playerPositions;
 var endPositions;
-var cells;
+
 
 socket.on("player number", function(num) {
 	playerNumber = num;

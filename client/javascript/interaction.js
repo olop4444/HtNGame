@@ -74,23 +74,26 @@ function move(playerNum, direction) {
 
 function moveOutcome(playerNum, direction) {
 	var currentPosition = playerPositions[playerNum];
+	var nextPosition = currentPosition;
+	var collision = false;
 	
-	if(direction == 'u') {
-		while(cells[currentPosition[0]][currentPosition[1]-1] != "W") {
-			currentPosition[1] -= 1;
+	while(!collision) {
+		if(direction == 'u') {
+			nextPosition[1] -= 1;
+		} else if (direction == 'd') {
+			nextPosition[1] += 1;
+		} else if (direction == 'l') {
+			nextPosition[0] -= 1;
+		} else if (direction == 'r') {
+			nextPosition[0] += 1;
 		}
-	} else if (direction == 'd') {
-		while(cells[currentPosition[0]][currentPosition[1]+1] != "W") {
-			currentPosition[1] += 1;
-		}
-	} else if (direction == 'l') {
-		while(cells[currentPosition[0]-1][currentPosition[1]] != "W") {
-			currentPosition[0] -= 1;
-		}
-	} else if (direction == 'r') {
-		while(cells[currentPosition[0]+1][currentPosition[1]] != "W") {
-			currentPosition[0] += 1;
-		}
+		
+		if(cells[nextPosition[0]][nextPosition[1]] == "W")
+			collision = true;
+		else if (playerPositions.indexOf(nextPosition) != -1)
+			collision = true;
+		else
+			currentPosition = nextPosition;
 	}
 	
 	return currentPosition;

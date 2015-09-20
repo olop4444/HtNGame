@@ -50,7 +50,7 @@ var roomSockets = {};
 var waitingSockets = [];
 var nextRoomId = 1;
 
-function addPlayer(socket) {
+function addPlayer(socket, callback) {
   console.log('New player: ');
 
   waitingSockets.push(socket);
@@ -74,29 +74,29 @@ function addPlayer(socket) {
 	    socket.emit("player number", index);
     });
 
-	io.to(nextRoomId).emit("map", generateMap(15, 15));
-    nextRoomId++;
-    waitingSockets = [];
+    generateMap(15, 15, function(map){
+        io.to(nextRoomId).emit("map", map);
+        nextRoomId++;
+        waitingSockets = [];
+        callback();
+    });
   }
 }
 
-function generateMap(width, height) {
+function generateMap(width, height, callback) {
 	var exec  = require('child_process').exec,
     child;
 	var map;
 
-	child = exec('./../a.out ' + width + ' ' + height,
-	function (error, stdout, stderr) {
-		if(stderr.length > 0)
-		  console.log('stderr:', stderr);
-		if (error !== null) {
-		  console.log('exec error:', error);
-		}
-		map = stdout;
-	});
-	while(map != null) { }
-	console.log("map: " + map);
-	return map;
+	child = exec('./../a.out ' + width + ' ' + height, function (error, stdout, stderr) {
+        if(stderr.length > 0)
+          console.log('stderr:', stderr);
+        if (error !== null) {
+          console.log('exec error:', error);
+        }
+        map = stdout;
+        callback(map)
+    });
 }
 
 function processAction(socket, action) {
@@ -114,14 +114,15 @@ function removePlayer(socket) {
 }
 
 io.on('connection', function (socket) {
-  addPlayer(socket);
-  socket.on('send action', function (data) {
-  	processAction(socket,data);
-  });
-  socket.on('disconnect', function () {
-    removePlayer(socket);
-  });
-  socket.on('victory', function () {
-    console.log("YAY");
+  addPlayer(socket, function () {
+      socket.on('send action', function (data) {
+        processAction(socket,data);
+      });
+      socket.on('disconnect', function () {
+        removePlayer(socket);
+      });
+      socket.on('victory', function () {
+        console.log("YAY");
+      });
   });
 });

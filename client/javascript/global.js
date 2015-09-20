@@ -18,8 +18,8 @@ var TREE_STOMP_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.png');
 var ICE_WALL_TEXTURE = PIXI.Texture.fromImage('images/ice_wall.png');
 
 // Unit Textures; TODO: replace tree stumps with something else
-var PLAYER_A_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.png');
-var PLAYER_B_TEXTURE = PIXI.Texture.fromImage('images/red_stump.png');
+var PLAYER_A_TEXTURE = PIXI.Texture.fromImage('images/blob.png');
+var PLAYER_B_TEXTURE = PIXI.Texture.fromImage('images/dog.png');
 
 // Endpoint Texture; TODO: replace with actual endpoint
 var ENDPOINT_TEXTURE = PIXI.Texture.fromImage('images/yellow_filter.png');

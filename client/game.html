@@ -13,8 +13,11 @@
 <body>
 
 	<div class="outer">
+		<p><button type="button" onclick="requestReset();" class="button"> Reset</button></p>
+		<p><button type="button" onclick="requestNewGame();" class="button"> New Game</button></p>
 		<div class="middle" id="canvas-container">
 			<!-- Canvas -->
+			<p id="waiting">Waiting on other players to join...</p>
 		</div>
 	</div>
 

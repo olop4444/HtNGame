@@ -19,6 +19,7 @@ socket.emit('choose difficulty', difficulty);
 
 socket.on("player number", function(num) {
 	playerNumber = num;
+	document.getElementById("waiting").style.display = "none";
 });
 
 socket.on("map", function(map) {
@@ -86,6 +87,8 @@ function move(playerNum, direction) {
 	if (isComplete()) {
 		socket.emit("victory");
 		gameStarted = false;
+		var snd = new Audio("../music/Ice_Level_Up_Fanfare_ABRIDGED.m4a");
+		snd.play();
 	}
 }
 
@@ -118,8 +121,9 @@ function moveOutcome(playerNum, direction) {
 function isComplete() {
 	var victory = true;
 	endPositions.forEach(function (endPosition) {
-		if(playerPositions.indexOf(endPosition) == -1)
-			victory = false;
+		victory = victory && playerPositions.some(function (playerPosition) {
+			return playerPosition[0] == endPosition[0] && playerPosition[1] == endPosition[1];
+		});
 	});
 	return victory;
 }
@@ -134,5 +138,5 @@ function requestNewGame() {
 
 function reset() {
 	playerPositions[0] = [1,1];
-	playerPositions[1] = [1,2];
+	playerPositions[1] = [2,1];
 }

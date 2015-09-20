@@ -19,11 +19,16 @@ html, body {
 
 .middle div, .middle canvas {
 	display: block;
-	margin-left: auto;
 	margin-right: auto; 
 }
 
 .inner {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.button {
+	width: 100px;
+	margin-left: 3cm;
+	margin-top: 0.5cm;
 }

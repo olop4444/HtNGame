@@ -46,20 +46,20 @@ function handler(request, response) {
   serve(request, response, done);
 }
 
-var waitingSockets = [];
+var waitingSockets = [[], [], [], []]
 var nextRoomId = 0;
 
-function addPlayer(socket) {
+function addPlayer(socket, difficulty) {
   console.log('New player: ');
 
-  waitingSockets.push(socket);
+  waitingSockets[difficulty].push(socket);
 
-  console.log('  added to waiting; queue size ' + waitingSockets.length);
+  console.log('  added to waiting; queue size ' + waitingSockets[difficulty].length);
 
-  if (waitingSockets.length >= MAX_ROOM_SIZE) {
+  if (waitingSockets[difficulty].length >= MAX_ROOM_SIZE) {
     console.log('  adding players to room ' + nextRoomId);
 
-    waitingSockets.forEach(function (socket, index) {
+    waitingSockets[difficulty].forEach(function (socket, index) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
 	    socket.playerId = index;
@@ -68,20 +68,35 @@ function addPlayer(socket) {
 	    socket.emit("player number", index);
     });
 
-    generateMap(15, 15, 18, function(map){
+    generateMap(difficulty, function(map){
         io.to(nextRoomId).emit("map", map);
         nextRoomId++;
-        waitingSockets = [];
+        waitingSockets[difficulty] = [];
     });
   }
 }
 
-function generateMap(width, height, difficulty, callback) {
+function generateMap(difficulty, callback) {
 	var exec = require('child_process').exec, 
       child;
 	var map;
 
-	child = exec('./a.out ' + width + ' ' + height + ' ' + difficulty, 
+    var width, height, pathdiff;
+    if(difficulty == 0){ // easy
+        width = height = 10;
+        pathdiff = 14;
+    }else if(difficulty == 1){ // medium
+        width = height = 15;
+        pathdiff = 19;
+    }else if(difficulty == 2){ // hard
+        width = height = 20;
+        pathdiff = 27;
+    }else if(difficulty == 3){ // intense
+        width = height = 20;
+        pathdiff = 10000;
+    }
+
+	child = exec('./a.out ' + width + ' ' + height + ' ' + pathdiff, 
     function (error, stdout, stderr) {
         if(stderr.length > 0)
           console.log('stderr:', stderr);
@@ -110,14 +125,17 @@ function resetRequest(socket) {
 	io.to(socket.roomId).emit('reset');
 }
 
-function newGame(socket) {
-	generateMap(15, 15, 18, function(map){
+function newGame(socket, difficulty) {
+	generateMap(difficulty, function(map){
         io.to(socket.roomId).emit("map", map);
     });
 }
 
 io.on('connection', function (socket) {
-	addPlayer(socket);
+      socket.on('choose difficulty', function (difficulty){
+        console.log('Player chose difficulty ' + difficulty)
+        addPlayer(socket, difficulty);
+      });
       socket.on('send action', function (data) {
         console.log("Received action: " + JSON.stringify(data))
         processAction(socket,data);
@@ -130,9 +148,9 @@ io.on('connection', function (socket) {
 		console.log("reset requested");
 		resetRequest(socket);
 	  });
-	  socket.on('request new game', function () {
-		console.log("new game requested");
-		newGame(socket);
+	  socket.on('request new game', function (difficulty) {
+		console.log("new game requested (difficulty=" + difficulty + ")");
+		newGame(socket, difficulty);
 	  });
       socket.on('victory', function () {
         console.log("victory");

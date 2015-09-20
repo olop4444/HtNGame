@@ -8,6 +8,14 @@ var canMove = true;
 var endPositions;
 var gameStarted = false;
 
+var difficulty = 0;
+if(location.search){
+    var diff = location.search.substring(1)
+    if(diff == "1") difficulty = 1;
+    else if(diff == "2") difficulty = 2;
+    else if(diff == "3") difficulty = 3;
+}
+socket.emit('choose difficulty', difficulty);
 
 socket.on("player number", function(num) {
 	playerNumber = num;
@@ -125,7 +133,7 @@ function requestReset() {
 }
 
 function requestNewGame() {
-	socket.emit('request new game');
+	socket.emit('request new game', difficulty);
 }
 
 function reset() {

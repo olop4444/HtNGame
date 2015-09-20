@@ -85,8 +85,13 @@ function processAction(socket, action) {
 } 
 
 function removePlayer(socket) {
-  io.to(socket.roomId).emit('dc', socket.playerId);
-  roomSockets[socket.roomId] = null;
+  var index = waitingSockets.indexOf(socket);
+  if(index != -1)
+	waitingSockets.splice(index,1);
+  else {
+    io.to(socket.roomId).emit('dc', socket.playerId);
+    roomSockets[socket.roomId] = null;
+  }
 }
 
 io.on('connection', function (socket) {

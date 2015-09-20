@@ -101,20 +101,28 @@ function animate() {
         var bxdiff = playerPositions[1][0]*cellWidth - units.children[1].x;
         var bydiff = playerPositions[1][1]*cellWidth - units.children[1].y;
 
-        if(Math.abs(axdiff) > 0){
+        if(Math.abs(axdiff) > VELOCITY/2){
             units.children[0].x += axdiff > 0 ? VELOCITY : -VELOCITY;
+        }else{
+            units.children[0].x = playerPositions[0][0]*cellWidth;
         }
 
-        if(Math.abs(aydiff) > 0){
+        if(Math.abs(aydiff) > VELOCITY/2){
             units.children[0].y += aydiff > 0 ? VELOCITY : -VELOCITY;
+        }else{
+            units.children[0].y = playerPositions[0][1]*cellWidth;
         }
 
-        if(Math.abs(bxdiff) > 0){
+        if(Math.abs(bxdiff) > VELOCITY/2){
             units.children[1].x += bxdiff > 0 ? VELOCITY : -VELOCITY;
+        }else{
+            units.children[1].x = playerPositions[1][0]*cellWidth;
         }
 
-        if(Math.abs(bydiff) > 0){
+        if(Math.abs(bydiff) > VELOCITY/2){
             units.children[1].y += bydiff > 0 ? VELOCITY : -VELOCITY;
+        }else{
+            units.children[1].y = playerPositions[1][1]*cellWidth;
         }
     }
 

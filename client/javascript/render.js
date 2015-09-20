@@ -13,15 +13,18 @@ var stage = new PIXI.Container();
 
 // Inner containers (layers)
 var terrain = new PIXI.Container(),
+    endpoints = new PIXI.Container(),
 	units = new PIXI.Container();
 
 stage.addChild(terrain);
+stage.addChild(endpoints);
 stage.addChild(units);
 
 var cellWidth;
 
 function resetStage() {
 	terrain.removeChildren();
+	endpoints.removeChildren();
 	units.removeChildren();
 }
 
@@ -63,6 +66,20 @@ function drawUnits() {
     units.addChild(playerB);
 }
 
+function drawEndpoints() {
+    end1 = new PIXI.Sprite(ENDPOINT_TEXTURE);
+    end2 = new PIXI.Sprite(ENDPOINT_TEXTURE);
+
+    end1.position.x = endPositions[0][0] * cellWidth;
+    end1.position.y = endPositions[0][1] * cellWidth;
+    end2.position.x = endPositions[1][0] * cellWidth;
+    end2.position.y = endPositions[1][1] * cellWidth;
+    end1.width = end1.height = end2.width = end2.height = cellWidth;
+
+    endpoints.addChild(end1);
+    endpoints.addChild(end2);
+}
+
 function drawCells() {
 	resetStage();
 
@@ -71,6 +88,7 @@ function drawCells() {
 
 	drawTerrain();
 	drawUnits();
+    drawEndpoints();
 }
 
 // Animate

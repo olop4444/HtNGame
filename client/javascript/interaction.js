@@ -139,4 +139,5 @@ function requestNewGame() {
 function reset() {
 	playerPositions[0] = [1,1];
 	playerPositions[1] = [2,1];
+	gameStarted = true;
 }

@@ -84,18 +84,20 @@ function addPlayer(socket, callback) {
 }
 
 function generateMap(width, height, callback) {
-	var exec  = require('child_process').exec,
-    child;
+	var exec = require('child_process').exec, 
+      child;
 	var map;
 
-	child = exec('./../a.out ' + width + ' ' + height, function (error, stdout, stderr) {
+	child = exec('./a.out ' + width + ' ' + height, 
+    function (error, stdout, stderr) {
         if(stderr.length > 0)
           console.log('stderr:', stderr);
         if (error !== null) {
           console.log('exec error:', error);
         }
-        map = stdout;
-        callback(map)
+        map = JSON.parse(stdout);
+        console.log(map);
+        callback(map);
     });
 }
 

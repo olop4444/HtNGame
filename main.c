@@ -68,21 +68,24 @@ void print_path(struct icemap im, struct distlast *dls, struct state src,
 }
 
 // find the farthest reachable state from im.start; store its distance in dist
-struct state farthest(struct icemap im, struct distlast *dls, size_t *dist){
-    size_t record = 0;
+struct state gen_endpoints(struct icemap im, struct distlast *dls, size_t *dist,
+                           int difficulty){
+    size_t record = SIZE_MAX;
+    size_t rec_dist = 0;
     struct state rec_state = im.start;
     for(size_t i = 0; i < im.width * im.width * im.height * im.height; i++){
         struct state st = index_to_state(im, i);
         struct state rev = {st.bpos, st.apos};
         size_t rev_idx = state_to_index(im, rev);
-        size_t score = dls[i].dist < dls[rev_idx].dist ? dls[i].dist :
+        size_t sdist = dls[i].dist < dls[rev_idx].dist ? dls[i].dist :
                                                          dls[rev_idx].dist;
-        if(SIZE_MAX > score && score > record){
-            record = score;
+        if(abs(sdist - difficulty) < record && sdist < SIZE_MAX){
+            record = abs(sdist-difficulty);
             rec_state = st;
+            rec_dist = sdist;
         }
     }
-    *dist = record;
+    *dist = rec_dist;
     return rec_state;
 }
 
@@ -102,14 +105,15 @@ int main(int argc, char *argv[]){
     exit(0);
     */
 
-    if(argc != 3){
+    if(argc != 4){
         goto usage;
     }
 
     int width = atoi(argv[1]);
     int height = atoi(argv[2]);
-    if(width <= 5 || height <= 5){
-        fprintf(stderr, "Width and height must be at least 6.\n");
+    int difficulty = atoi(argv[3]);
+    if(width <= 5 || height <= 5 || difficulty < 1){
+        fprintf(stderr, "Width and height must be at least 6; difficulty>0\n");
         goto usage;
     }
 
@@ -120,7 +124,7 @@ int main(int argc, char *argv[]){
     struct distlast *dls = spaths(*im);
 
     size_t dist;
-    struct state goal = farthest(*im, dls, &dist);
+    struct state goal = gen_endpoints(*im, dls, &dist, difficulty);
     /*
     printf("goal: (%zd,%zd) and (%zd,%zd)\n", goal.apos.x, goal.apos.y,
                                               goal.bpos.x, goal.bpos.y);
@@ -158,6 +162,6 @@ int main(int argc, char *argv[]){
     return 0;
 
     usage:
-        fprintf(stderr, "Usage: %s width height\n", argv[0]);
+        fprintf(stderr, "Usage: %s width height difficulty\n", argv[0]);
         return 1;
 }

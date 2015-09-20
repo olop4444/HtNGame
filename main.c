@@ -79,7 +79,7 @@ struct state gen_endpoints(struct icemap im, struct distlast *dls, size_t *dist,
         size_t rev_idx = state_to_index(im, rev);
         size_t sdist = dls[i].dist < dls[rev_idx].dist ? dls[i].dist :
                                                          dls[rev_idx].dist;
-        if(abs(sdist - difficulty) < record && sdist < SIZE_MAX){
+        if(abs(sdist - difficulty) <= record && sdist < SIZE_MAX){
             record = abs(sdist-difficulty);
             rec_state = st;
             rec_dist = sdist;

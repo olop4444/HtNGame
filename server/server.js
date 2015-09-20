@@ -96,7 +96,6 @@ function generateMap(width, height, callback) {
           console.log('exec error:', error);
         }
         map = JSON.parse(stdout);
-        console.log(map);
         callback(map);
     });
 }

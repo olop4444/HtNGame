@@ -18,8 +18,7 @@ var terrain = new PIXI.Container(),
 stage.addChild(terrain);
 stage.addChild(units);
 
-var cellWidth,
-	cellHeight;
+var cellWidth;
 
 function resetStage() {
 	terrain.removeChildren();
@@ -40,11 +39,10 @@ function drawTerrain() {
 				case CELL_GRASS:
 					tile = new PIXI.Sprite(GRASS_TILE_TEXTURE); break;
 			}
-			tile.position.x = columnIndex * cellHeight;
+			tile.position.x = columnIndex * cellWidth;
 			tile.position.y = rowIndex * cellWidth;
 
-			tile.width = cellWidth;
-			tile.height = cellHeight;
+			tile.width = tile.height = cellWidth;
 
 			terrain.addChild(tile);
 		});
@@ -52,14 +50,24 @@ function drawTerrain() {
 }
 
 function drawUnits() {
+    playerA = new PIXI.Sprite(PLAYER_A_TEXTURE);
+    playerB = new PIXI.Sprite(PLAYER_B_TEXTURE);
 
+    playerA.position.x = playerPositions[0][0] * cellWidth;
+    playerA.position.y = playerPositions[0][1] * cellWidth;
+    playerB.position.x = playerPositions[1][0] * cellWidth;
+    playerB.position.y = playerPositions[1][1] * cellWidth;
+    playerA.width = playerA.height = playerB.width = playerB.height = cellWidth;
+
+    units.addChild(playerA);
+    units.addChild(playerB);
 }
 
 function drawCells() {
 	resetStage();
 
-    cellWidth = cellHeight = Math.min(Math.floor(CANVAS_WIDTH/cells[0].length),
-                                      Math.floor(CANVAS_HEIGHT/cells.length))
+    cellWidth = Math.min(Math.floor(CANVAS_WIDTH/cells[0].length),
+                         Math.floor(CANVAS_HEIGHT/cells.length))
 
 	drawTerrain();
 	drawUnits();

@@ -14,7 +14,9 @@ var ICE_TILE_TEXTURE = PIXI.Texture.fromImage('images/ice_tile.jpg');
 var TREE_STOMP_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.png');
 var ICE_WALL_TEXTURE = PIXI.Texture.fromImage('images/ice_wall.png');
 
-// Unit Textures
+// Unit Textures; TODO: replace tree stumps with something else
+var PLAYER_A_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.png');
+var PLAYER_B_TEXTURE = PIXI.Texture.fromImage('images/red_stump.png');
 
 
 // Cell Types

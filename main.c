@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
     int width = atoi(argv[1]);
     int height = atoi(argv[2]);
     if(width <= 5 || height <= 5){
-        fprintf(stderr, "Width and height must be at least 5.\n");
+        fprintf(stderr, "Width and height must be at least 6.\n");
         goto usage;
     }
 

@@ -74,10 +74,26 @@ function addPlayer(socket) {
 	    socket.emit("player number", i);
     });
 
-	  io.to(nextRoomId).emit("map", DEBUG_MAP);
+	io.to(nextRoomId).emit("map", generateMap(15, 15));
     nextRoomId++;
     waitingSockets = [];
   }
+}
+
+function generateMap(width, height) {
+	var exec  = require('child_process').exec,
+    child;
+	var map;
+
+	child = exec('a.out ' + width + ' ' + height,
+	function (error, stdout, stderr) {
+		console.log('stderr:', stderr);
+		if (error !== null) {
+		  console.log('exec error:', error);
+		}
+		map = stdout;
+	});
+	return map;
 }
 
 function processAction(socket, action) {

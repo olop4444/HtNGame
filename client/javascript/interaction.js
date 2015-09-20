@@ -78,6 +78,8 @@ function move(playerNum, direction) {
 	if (isComplete()) {
 		socket.emit("victory");
 		gameStarted = false;
+		var snd = new Audio("file.wav"); // buffers automatically when created
+		snd.play();
 	}
 }
 
@@ -126,5 +128,5 @@ function requestNewGame() {
 
 function reset() {
 	playerPositions[0] = [1,1];
-	playerPositions[1] = [1,2];
+	playerPositions[1] = [2,1];
 }

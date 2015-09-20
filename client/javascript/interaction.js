@@ -112,8 +112,12 @@ function moveOutcome(playerNum, direction) {
 function isComplete() {
 	var victory = true;
 	endPositions.forEach(function (endPosition) {
-		if(playerPositions.indexOf(endPosition) == -1)
-			victory = false;
+		victory = victory && playerPositions.some(function (playerPosition) {
+			if(playerPosition == endPosition) {
+				return true;
+			}
+			return false;
+		});
 	});
 	return victory;
 }

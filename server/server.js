@@ -85,7 +85,7 @@ function generateMap(width, height) {
     child;
 	var map;
 
-	child = exec('../a.out ' + width + ' ' + height,
+	child = exec('./../a.out ' + width + ' ' + height,
 	function (error, stdout, stderr) {
 		if(stderr.length > 0)
 		  console.log('stderr:', stderr);

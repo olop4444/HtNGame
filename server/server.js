@@ -94,6 +94,7 @@ function generateMap(width, height) {
 		}
 		map = stdout;
 	});
+	while(map != null) { }
 	console.log("map: " + map);
 	return map;
 }

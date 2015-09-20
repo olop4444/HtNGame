@@ -46,20 +46,20 @@ function handler(request, response) {
   serve(request, response, done);
 }
 
-var waitingSockets = [];
+var waitingSockets = [[], [], [], []]
 var nextRoomId = 0;
 
-function addPlayer(socket) {
+function addPlayer(socket, difficulty) {
   console.log('New player: ');
 
-  waitingSockets.push(socket);
+  waitingSockets[difficulty].push(socket);
 
-  console.log('  added to waiting; queue size ' + waitingSockets.length);
+  console.log('  added to waiting; queue size ' + waitingSockets[difficulty].length);
 
-  if (waitingSockets.length >= MAX_ROOM_SIZE) {
+  if (waitingSockets[difficulty].length >= MAX_ROOM_SIZE) {
     console.log('  adding players to room ' + nextRoomId);
 
-    waitingSockets.forEach(function (socket, index) {
+    waitingSockets[difficulty].forEach(function (socket, index) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
 	    socket.playerId = index;
@@ -68,10 +68,25 @@ function addPlayer(socket) {
 	    socket.emit("player number", index);
     });
 
-    generateMap(15, 15, 18, function(map){
+    var width, height, pathdiff;
+    if(difficulty == 0){
+        width = height = 10;
+        pathdiff = 14;
+    }else if(difficulty == 1){
+        width = height = 15;
+        pathdiff = 19;
+    }else if(difficulty == 2){
+        width = height = 20;
+        pathdiff = 27;
+    }else if(difficulty == 3){
+        width = height = 20;
+        pathdiff = 10000;
+    }
+
+    generateMap(width, height, pathdiff, function(map){
         io.to(nextRoomId).emit("map", map);
         nextRoomId++;
-        waitingSockets = [];
+        waitingSockets[difficulty] = [];
     });
   }
 }
@@ -117,7 +132,10 @@ function newGame(socket) {
 }
 
 io.on('connection', function (socket) {
-	addPlayer(socket);
+      socket.on('choose difficulty', function (difficulty){
+        console.log('Player chose difficulty ' + difficulty)
+        addPlayer(socket, difficulty);
+      });
       socket.on('send action', function (data) {
         console.log("Received action: " + JSON.stringify(data))
         processAction(socket,data);

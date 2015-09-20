@@ -117,7 +117,7 @@ function removePlayer(socket) {
 io.on('connection', function (socket) {
   addPlayer(socket, function () {
       socket.on('send action', function (data) {
-        console.log("Received action: " + data)
+        console.log("Received action: " + JSON.stringify(data))
         processAction(socket,data);
       });
       socket.on('disconnect', function () {

@@ -106,6 +106,16 @@ function removePlayer(socket) {
   }
 }
 
+function resetRequest(socket) {
+	io.to(socket.roomId).emit('reset');
+}
+
+function newGame(socket) {
+	generateMap(15, 15, 18, function(map){
+        io.to(socket.roomId).emit("map", map);
+    });
+}
+
 io.on('connection', function (socket) {
 	addPlayer(socket);
       socket.on('send action', function (data) {
@@ -116,7 +126,15 @@ io.on('connection', function (socket) {
         console.log("Disconnect occurred")
         removePlayer(socket);
       });
+	  socket.on('request reset', function () {
+		console.log("reset requested");
+		resetRequest(socket);
+	  });
+	  socket.on('request new game', function () {
+		console.log("new game requested");
+		newGame(socket);
+	  });
       socket.on('victory', function () {
-        console.log("YAY");
+        console.log("victory");
       });
 });

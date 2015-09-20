@@ -33,6 +33,10 @@ socket.on("dc", function(playerId) {
 	socket.disconnect();
 });
 
+socket.on("reset", function() {
+	reset();
+});
+
 document.onkeydown = checkKey;
 
 function checkKey(e) {
@@ -69,12 +73,11 @@ function checkKey(e) {
 function move(playerNum, direction) {
 	var landingPosition = moveOutcome(playerNum,direction);
 	
-	//do animations?
 	playerPositions[playerNum] = landingPosition;
 	
-	//check for victory
 	if (isComplete()) {
 		socket.emit("victory");
+		gameStarted = false;
 	}
 }
 
@@ -111,4 +114,17 @@ function isComplete() {
 			victory = false;
 	});
 	return victory;
+}
+
+function requestReset() {
+	socket.emit('request reset');
+}
+
+function requestNewGame() {
+	socket.emit('request new game');
+}
+
+function reset() {
+	playerPositions[0] = [1,1];
+	playerPositions[1] = [1,2];
 }

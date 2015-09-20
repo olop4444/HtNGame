@@ -71,7 +71,7 @@ function addPlayer(socket) {
         roomSockets[nextRoomId].push(socket);
       }
       
-	    socket.emit("player number", i);
+	    socket.emit("player number", index);
     });
 
 	io.to(nextRoomId).emit("map", generateMap(15, 15));

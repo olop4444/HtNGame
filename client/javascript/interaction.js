@@ -38,7 +38,7 @@ socket.on("receive action", function(action) {
 });
 
 socket.on("dc", function(playerId) {
-	//"player playerId has disconnected"
+	document.getElementById("waiting").innerHTML = "A player disconnected. Please refresh to play again.";
 	socket.disconnect();
 });
 
@@ -89,6 +89,7 @@ function move(playerNum, direction) {
 		gameStarted = false;
 		var snd = new Audio("../music/Ice_Level_Up_Fanfare_ABRIDGED.m4a");
 		snd.play();
+		alert("You won!");
 	}
 }
 

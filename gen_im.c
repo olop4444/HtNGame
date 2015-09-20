@@ -2,6 +2,7 @@
 #include "types.h"
 
 #include <stdlib.h>
+#include <time.h>
 #include <assert.h>
 
 struct icemap *rand_icemap(size_t width, size_t height, double density){
@@ -30,6 +31,7 @@ struct icemap *rand_icemap(size_t width, size_t height, double density){
     }
 
     // generate random boulders
+    srand(time(NULL));
     for(int i = 0; i < num_bldrs; i++){
         // TODO: this could go on forever or something, but whatever
         size_t bx,by;

@@ -46,11 +46,10 @@ function handler(request, response) {
   serve(request, response, done);
 }
 
-var roomSockets = {};
 var waitingSockets = [];
-var nextRoomId = 1;
+var nextRoomId = 0;
 
-function addPlayer(socket, callback) {
+function addPlayer(socket) {
   console.log('New player: ');
 
   waitingSockets.push(socket);
@@ -64,12 +63,7 @@ function addPlayer(socket, callback) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
 	    socket.playerId = index;
-
-      if (roomSockets[nextRoomId] == null) {
-        roomSockets[nextRoomId] = [socket];
-      } else {
-        roomSockets[nextRoomId].push(socket);
-      }
+		console.log('player received number: ' + index);
       
 	    socket.emit("player number", index);
     });
@@ -78,7 +72,6 @@ function addPlayer(socket, callback) {
         io.to(nextRoomId).emit("map", map);
         nextRoomId++;
         waitingSockets = [];
-        callback();
     });
   }
 }
@@ -96,7 +89,6 @@ function generateMap(width, height, callback) {
           console.log('exec error:', error);
         }
         map = JSON.parse(stdout);
-        console.log(map);
         callback(map);
     });
 }
@@ -111,20 +103,20 @@ function removePlayer(socket) {
 	waitingSockets.splice(index,1);
   else {
     io.to(socket.roomId).emit('dc', socket.playerId);
-    roomSockets[socket.roomId] = null;
   }
 }
 
 io.on('connection', function (socket) {
-  addPlayer(socket, function () {
+	addPlayer(socket);
       socket.on('send action', function (data) {
+        console.log("Received action: " + JSON.stringify(data))
         processAction(socket,data);
       });
       socket.on('disconnect', function () {
+        console.log("Disconnect occurred")
         removePlayer(socket);
       });
       socket.on('victory', function () {
         console.log("YAY");
       });
-  });
 });

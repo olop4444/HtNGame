@@ -130,8 +130,8 @@ int main(int argc, char *argv[]){
     // print the created game in JSON to stdout
     printf("{\"width\" : %d,\n", width);
     printf("\"height\" : %d,\n", height);
-    printf("\"A_start\" : [%zd,%zd],\n", goal.apos.x, goal.apos.y);
-    printf("\"B_start\" : [%zd,%zd],\n", goal.bpos.x, goal.bpos.y);
+    printf("\"A_start\" : [%zd,%zd],\n", im->start.apos.x, im->start.apos.y);
+    printf("\"B_start\" : [%zd,%zd],\n", im->start.bpos.x, im->start.bpos.y);
     printf("\"end_points\" : [[%zd,%zd],[%zd,%zd]],\n",
            goal.apos.x, goal.apos.y, goal.bpos.x, goal.bpos.y);
     printf("\"min_moves\" : %zd,\n", dist);

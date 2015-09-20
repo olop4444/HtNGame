@@ -6,6 +6,7 @@ var socket = io();
 var playerNumber;
 var canMove = true;
 var endPositions;
+var gameStarted = false;
 
 
 socket.on("player number", function(num) {
@@ -19,6 +20,7 @@ socket.on("map", function(map) {
 	endPositions = map.end_points;
 	cells = map.cells;
 	drawCells();
+	gameStarted = true;
 });
 
 socket.on("receive action", function(action) {
@@ -34,12 +36,12 @@ socket.on("dc", function(playerId) {
 document.onkeydown = checkKey;
 
 function checkKey(e) {
-	if(canMove) {
+	if(gameStarted && canMove && !inMotion()) {
 		canMove = false;
 
 		e = e || window.event;
 
-		var dir;
+		var dir = null;
 		if (e.keyCode == '38') {
 			dir = 'u';
 		}
@@ -52,12 +54,15 @@ function checkKey(e) {
 		else if (e.keyCode == '39') {
 			dir = 'r';
 		}
-		
-		var action = {};
-		action["playerNum"] = playerNumber;
-		action["direction"] = dir;
+		if (dir != null) {		
+			var action = {};
+			action["playerNum"] = playerNumber;
+			action["direction"] = dir;
 
-		socket.emit("send action", action);
+			socket.emit("send action", action);
+		} else {
+			canMove = true;
+		}
 	}
 }
 
@@ -74,11 +79,11 @@ function move(playerNum, direction) {
 }
 
 function moveOutcome(playerNum, direction) {
-	var currentPosition = playerPositions[playerNum];
-	var nextPosition = currentPosition;
-	var collision = false;
-	
-	while(!collision) {
+	var currentPosition = playerPositions[playerNum].slice();
+    var otherPosition = playerPositions[(playerNum+1)%2];
+
+    while(true){
+        var nextPosition = currentPosition.slice();
 		if(direction == 'u') {
 			nextPosition[1] -= 1;
 		} else if (direction == 'd') {
@@ -89,27 +94,21 @@ function moveOutcome(playerNum, direction) {
 			nextPosition[0] += 1;
 		}
 		
-		if(cells[nextPosition[0]][nextPosition[1]] == "W")
-			collision = true;
-		else if (playerPositions.indexOf(nextPosition) != -1)
-			collision = true;
-		else
-			currentPosition = nextPosition;
+		if(cells[nextPosition[1]][nextPosition[0]] == "W" ||
+           (nextPosition[0] == otherPosition[0] && nextPosition[1] == otherPosition[1])){
+            console.log("cur, next, other are " + currentPosition + ", " + nextPosition + ", " + otherPosition);
+            return currentPosition;
+        }
+
+        currentPosition = nextPosition;
 	}
-	
-	return currentPosition;
 }
 
 function isComplete() {
+	var victory = true;
 	endPositions.forEach(function (endPosition) {
-		var found = false;
-		playerPositions.forEach(function (playerPosition) {
-			if(playerPosition == endPosition) {
-				found = true;
-			}
-		});		
-		if(!found) 
-			return false;
+		if(playerPositions.indexOf(endPosition) == -1)
+			victory = false;
 	});
-	return true;
+	return victory;
 }

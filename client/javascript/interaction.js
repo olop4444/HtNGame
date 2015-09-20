@@ -11,6 +11,7 @@ var gameStarted = false;
 
 socket.on("player number", function(num) {
 	playerNumber = num;
+	document.getElementById("waiting").style.display = "none";
 });
 
 socket.on("map", function(map) {
@@ -113,10 +114,7 @@ function isComplete() {
 	var victory = true;
 	endPositions.forEach(function (endPosition) {
 		victory = victory && playerPositions.some(function (playerPosition) {
-			if(playerPosition == endPosition) {
-				return true;
-			}
-			return false;
+			return playerPosition[0] == endPosition[0] && playerPosition[1] == endPosition[1];
 		});
 	});
 	return victory;

@@ -29,25 +29,23 @@ function resetStage() {
 }
 
 function drawTerrain() {
+    floor = new PIXI.Sprite(ICE_TILE_TEXTURE);
+    floor.position.x = 0;
+    floor.position.y = 0;
+    floor.width = CANVAS_WIDTH;
+    floor.height = CANVAS_HEIGHT;
+    terrain.addChild(floor);
+
 	cells.forEach(function (row, rowIndex) {
 		row.forEach(function (cell, columnIndex) {
-			var tile;
-			switch (cell) {
-				case CELL_ICE:
-					tile = new PIXI.Sprite(ICE_TILE_TEXTURE); break;
-				case CELL_WALL:
-					tile = new PIXI.Sprite(ICE_WALL_TEXTURE); break;
-				case CELL_STOMP:
-					tile = new PIXI.Sprite(TREE_STOMP_TEXTURE); break;
-				case CELL_GRASS:
-					tile = new PIXI.Sprite(GRASS_TILE_TEXTURE); break;
+            if(cell == CELL_WALL){
+                tile = new PIXI.Sprite(ICE_WALL_TEXTURE);
+                tile.position.x = columnIndex * cellWidth;
+                tile.position.y = rowIndex * cellWidth;
+                tile.width = tile.height = cellWidth;
+
+                terrain.addChild(tile);
 			}
-			tile.position.x = columnIndex * cellWidth;
-			tile.position.y = rowIndex * cellWidth;
-
-			tile.width = tile.height = cellWidth;
-
-			terrain.addChild(tile);
 		});
 	});
 }

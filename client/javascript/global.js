@@ -11,8 +11,8 @@ var CANVAS_HEIGHT = 600,
 // Terrain Textures
 var GRASS_TILE_TEXTURE = PIXI.Texture.fromImage('images/grass_tile.jpg');
 var ICE_TILE_TEXTURE = PIXI.Texture.fromImage('images/ice_tile.jpg');
-var TREE_STOMP_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.jpg');
-var ICE_WALL_TEXTURE = PIXI.Texture.fromImage('images/ice_wall.jpg');
+var TREE_STOMP_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.png');
+var ICE_WALL_TEXTURE = PIXI.Texture.fromImage('images/ice_wall.png');
 
 // Unit Textures
 

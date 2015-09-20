@@ -46,9 +46,8 @@ function handler(request, response) {
   serve(request, response, done);
 }
 
-var roomSockets = {};
 var waitingSockets = [];
-var nextRoomId = 1;
+var nextRoomId = 0;
 
 function addPlayer(socket, callback) {
   console.log('New player: ');
@@ -64,12 +63,7 @@ function addPlayer(socket, callback) {
       socket.join(nextRoomId);
       socket.roomId = nextRoomId;
 	    socket.playerId = index;
-
-      if (roomSockets[nextRoomId] == null) {
-        roomSockets[nextRoomId] = [socket];
-      } else {
-        roomSockets[nextRoomId].push(socket);
-      }
+		console.log('player received number: ' + index);
       
 	    socket.emit("player number", index);
     });
@@ -110,7 +104,6 @@ function removePlayer(socket) {
 	waitingSockets.splice(index,1);
   else {
     io.to(socket.roomId).emit('dc', socket.playerId);
-    roomSockets[socket.roomId] = null;
   }
 }
 

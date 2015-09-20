@@ -41,7 +41,7 @@ function checkKey(e) {
 
 		e = e || window.event;
 
-		var dir;
+		var dir = null;
 		if (e.keyCode == '38') {
 			dir = 'u';
 		}
@@ -54,12 +54,16 @@ function checkKey(e) {
 		else if (e.keyCode == '39') {
 			dir = 'r';
 		}
-		
-		var action = {};
-		action["playerNum"] = playerNumber;
-		action["direction"] = dir;
+		if (dir != null) {		
+			var action = {};
+			action["playerNum"] = playerNumber;
+			action["direction"] = dir;
 
-		socket.emit("send action", action);
+			console.log(action);
+			socket.emit("send action", action);
+		} else {
+			canMove = true;
+		}
 	}
 }
 
@@ -103,9 +107,10 @@ function moveOutcome(playerNum, direction) {
 }
 
 function isComplete() {
+	var victory = true;
 	endPositions.forEach(function (endPosition) {
 		if(playerPositions.indexOf(endPosition) == -1)
-			return false;
+			victory = false;
 	});
-	return true;
+	return victory;
 }

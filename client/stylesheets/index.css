@@ -1,0 +1,52 @@
+@font-face {
+    font-family: Adventure;
+    src: url("../fonts/Adventure.ttf");
+}
+
+body {
+	color: white;
+	font-weight: bold;
+	font-family: "Adventure";
+	background-image: url("../images/background.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.inner-text {
+	width: 100%; 
+	max-width: 600px;
+	text-align: center;
+}
+
+p.title {
+	font-size: 80px;
+	margin: 20px 0;
+}
+
+p.subtitle {
+	font-size: 24px;
+	margin: 12px 0;
+}
+
+.start-button {
+	margin-top: 100px;
+	margin-bottom: 100px;
+}
+
+.toggle a {
+	text-decoration: none;
+	color: #EEE;
+}
+
+.toggle a:hover {
+	color: #FFF;
+}
+
+.toggle a:active {
+	color: #CCC;
+}
+
+.toggle a:visited {
+	color: #EEE;
+}

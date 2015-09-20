@@ -89,6 +89,14 @@ function drawCells() {
     drawEndpoints();
 }
 
+// determines whether or not a player is in motion
+function inMotion() {
+    return playerPositions[0][0]*cellWidth != units.children[0].x ||
+           playerPositions[0][1]*cellWidth != units.children[0].y ||
+           playerPositions[1][0]*cellWidth != units.children[1].x ||
+           playerPositions[1][1]*cellWidth != units.children[1].y;
+}
+
 // Animate
 animate();
 

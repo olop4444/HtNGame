@@ -36,7 +36,7 @@ socket.on("dc", function(playerId) {
 document.onkeydown = checkKey;
 
 function checkKey(e) {
-	if(gameStarted && canMove) {
+	if(gameStarted && canMove && !inMotion()) {
 		canMove = false;
 
 		e = e || window.event;

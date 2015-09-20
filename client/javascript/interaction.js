@@ -38,7 +38,7 @@ socket.on("receive action", function(action) {
 });
 
 socket.on("dc", function(playerId) {
-	//"player playerId has disconnected"
+	document.getElementById("waiting").innerHTML = "A player disconnected. Please refresh to play again.";
 	socket.disconnect();
 });
 

@@ -6,6 +6,7 @@ var socket = io();
 var playerNumber;
 var canMove = true;
 var endPositions;
+var gameStarted = false;
 
 
 socket.on("player number", function(num) {
@@ -19,6 +20,7 @@ socket.on("map", function(map) {
 	endPositions = map.end_points;
 	cells = map.cells;
 	drawCells();
+	gameStarted = true;
 });
 
 socket.on("receive action", function(action) {
@@ -34,7 +36,7 @@ socket.on("dc", function(playerId) {
 document.onkeydown = checkKey;
 
 function checkKey(e) {
-	if(canMove) {
+	if(gameStarted && canMove) {
 		canMove = false;
 
 		e = e || window.event;
@@ -102,13 +104,7 @@ function moveOutcome(playerNum, direction) {
 
 function isComplete() {
 	endPositions.forEach(function (endPosition) {
-		var found = false;
-		playerPositions.forEach(function (playerPosition) {
-			if(playerPosition == endPosition) {
-				found = true;
-			}
-		});		
-		if(!found) 
+		if(playerPositions.indexOf(endPosition) == -1)
 			return false;
 	});
 	return true;

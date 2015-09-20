@@ -68,7 +68,7 @@ function addPlayer(socket) {
 	    socket.emit("player number", index);
     });
 
-    generateMap(15, 15, function(map){
+    generateMap(15, 15, 18, function(map){
         io.to(nextRoomId).emit("map", map);
         nextRoomId++;
         waitingSockets = [];
@@ -76,12 +76,12 @@ function addPlayer(socket) {
   }
 }
 
-function generateMap(width, height, callback) {
+function generateMap(width, height, difficulty, callback) {
 	var exec = require('child_process').exec, 
       child;
 	var map;
 
-	child = exec('./a.out ' + width + ' ' + height, 
+	child = exec('./a.out ' + width + ' ' + height + ' ' + difficulty, 
     function (error, stdout, stderr) {
         if(stderr.length > 0)
           console.log('stderr:', stderr);

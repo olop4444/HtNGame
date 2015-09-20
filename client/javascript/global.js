@@ -5,7 +5,7 @@
 // --- Constants ---
 
 // Canvas Dimensions
-var CANVAS_HEIGHT = 800,
+var CANVAS_HEIGHT = 600,
 	CANVAS_WIDTH = 600;
 
 // Terrain Textures

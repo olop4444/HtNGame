@@ -58,8 +58,8 @@ function drawUnits() {
 function drawCells() {
 	resetStage();
 
-	cellWidth = CANVAS_WIDTH / cells[0].length;
-	cellHeight = CANVAS_HEIGHT / cells.length;
+    cellWidth = cellHeight = Math.min(Math.floor(CANVAS_WIDTH/cells[0].length),
+                                      Math.floor(CANVAS_HEIGHT/cells.length))
 
 	drawTerrain();
 	drawUnits();

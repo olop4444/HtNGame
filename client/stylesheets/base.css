@@ -40,3 +40,17 @@ html, body {
 	margin-left: 3cm;
 	margin-top: 0.5cm;
 }
+
+.new-easy {
+	background-color: #00ffff;
+}
+.new-medium {
+	background-color: #00ff00;
+}
+.new-hard {
+	background-color: #ffa500;
+}
+.new-intense {
+	background-color: #ff0000;
+}
+

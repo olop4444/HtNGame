@@ -14,7 +14,10 @@
 
 	<div class="outer">
 		<p><button type="button" onclick="requestReset();" class="button"> Reset</button></p>
-		<p><button type="button" onclick="requestNewGame();" class="button"> New Game</button></p>
+		<p><button type="button" onclick="requestNewGame(0);" class="button new-easy"> New Game (easy)</button></p>
+		<p><button type="button" onclick="requestNewGame(1);" class="button new-medium"> New Game (medium)</button></p>
+		<p><button type="button" onclick="requestNewGame(2);" class="button new-hard"> New Game (hard)</button></p>
+		<p><button type="button" onclick="requestNewGame(3);" class="button new-intense"> New Game (intense)</button></p>
 		<div class="middle" id="canvas-container">
 			<!-- Canvas -->
 			<p id="waiting">Waiting on other players to join...</p>

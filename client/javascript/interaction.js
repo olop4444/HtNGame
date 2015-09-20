@@ -89,6 +89,7 @@ function move(playerNum, direction) {
 		gameStarted = false;
 		var snd = new Audio("../music/Ice_Level_Up_Fanfare_ABRIDGED.m4a");
 		snd.play();
+		alert("You won!");
 	}
 }
 

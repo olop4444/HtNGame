@@ -22,7 +22,7 @@ var PLAYER_A_TEXTURE = PIXI.Texture.fromImage('images/tree_stomp.png');
 var PLAYER_B_TEXTURE = PIXI.Texture.fromImage('images/red_stump.png');
 
 // Endpoint Texture; TODO: replace with actual endpoint
-var ENDPOINT_TEXTURE = PIXI.Texture.fromImage('images/endpoint.png');
+var ENDPOINT_TEXTURE = PIXI.Texture.fromImage('images/yellow_filter.png');
 
 // Cell Types
 var CELL_ICE = " ",

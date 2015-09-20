@@ -97,5 +97,28 @@ animate();
 function animate() {
 	requestAnimationFrame(animate);
 
+    if(units && playerPositions){
+        var axdiff = playerPositions[0][0]*cellWidth - units.children[0].x;
+        var aydiff = playerPositions[0][1]*cellWidth - units.children[0].y;
+        var bxdiff = playerPositions[1][0]*cellWidth - units.children[1].x;
+        var bydiff = playerPositions[1][1]*cellWidth - units.children[1].y;
+
+        if(Math.abs(axdiff) > 0){
+            units.children[0].x += axdiff > 0 ? VELOCITY : -VELOCITY;
+        }
+
+        if(Math.abs(aydiff) > 0){
+            units.children[0].y += aydiff > 0 ? VELOCITY : -VELOCITY;
+        }
+
+        if(Math.abs(bxdiff) > 0){
+            units.children[1].x += bxdiff > 0 ? VELOCITY : -VELOCITY;
+        }
+
+        if(Math.abs(bydiff) > 0){
+            units.children[1].y += bydiff > 0 ? VELOCITY : -VELOCITY;
+        }
+    }
+
 	renderer.render(stage);
 }

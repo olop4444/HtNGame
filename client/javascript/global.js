@@ -8,6 +8,9 @@
 var CANVAS_HEIGHT = 600,
 	CANVAS_WIDTH = 600;
 
+// Player Animation Velocity
+var VELOCITY = 2.5;
+
 // Terrain Textures
 var GRASS_TILE_TEXTURE = PIXI.Texture.fromImage('images/grass_tile.jpg');
 var ICE_TILE_TEXTURE = PIXI.Texture.fromImage('images/ice_tile.jpg');

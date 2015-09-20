@@ -79,7 +79,7 @@ function move(playerNum, direction) {
 	if (isComplete()) {
 		socket.emit("victory");
 		gameStarted = false;
-		var snd = new Audio("Ice_Level_Up_Fanfare_ABRIDGED.m4a");
+		var snd = new Audio("../music/Ice_Level_Up_Fanfare_ABRIDGED.m4a");
 		snd.play();
 	}
 }

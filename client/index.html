@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+	<meta charset="UTF-8">
 	<title>Ice Game | Home</title>
 
-	<!-- stylesheets -->
+	<!-- Snow Effect -->
+	<script type="text/javascript" src="javascript/libraries/snowstorm-min.js"></script>
+
+	<!-- Javascript -->
+	<script type="text/javascript" src="javascript/index.js"></script>
+
+	<!-- Stylesheets -->
 	<link href="stylesheets/base.css" rel="stylesheet" />
+	<link href="stylesheets/index.css" rel="stylesheet" />
 
 </head>
 <body>
 
-	<a href="/game.html">Game</a>
+	<audio autoplay="autoplay" id="ambiance">
+		<source src="music/theme.m4a" />
+	</audio>
+
+	<div class="outer">
+		<div class="middle">
+			<div class="inner inner-text">
+				<p class="title">ICE</p>
+				<p class="subtitle">SLIDE YOUR WAY TO VICTORY</p>
+				<a href="/game.html">
+					<button type="button" class="start-button">Start</button>
+				</a>
+				<p class="toggle" id="resemblance">
+					<a href="javascript:false" onclick="toggleAudio('ambiance', 'resemblance')">SOUND</a>
+				</p>
+			</div>
+		</div>
+	</div>
 
 </body>
 

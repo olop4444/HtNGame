@@ -3,7 +3,6 @@ html, body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	background-color: #633;
 }
 
 .outer {
@@ -18,8 +17,8 @@ html, body {
 	vertical-align: middle;
 }
 
-.inner {
+.middle div, .middle canvas {
+	display: block;
 	margin-left: auto;
 	margin-right: auto; 
-	width: 280px;
 }

@@ -18,6 +18,7 @@ socket.on("map", function(map) {
 	playerPositions = [map.A_start, map.B_start];
 	endPositions = map.end_points;
 	cells = map.cells;
+	drawCells();
 });
 
 socket.on("receive action", function(action) {

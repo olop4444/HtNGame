@@ -49,7 +49,7 @@ function handler(request, response) {
 var waitingSockets = [];
 var nextRoomId = 0;
 
-function addPlayer(socket, callback) {
+function addPlayer(socket) {
   console.log('New player: ');
 
   waitingSockets.push(socket);
@@ -72,7 +72,6 @@ function addPlayer(socket, callback) {
         io.to(nextRoomId).emit("map", map);
         nextRoomId++;
         waitingSockets = [];
-        callback();
     });
   }
 }
@@ -108,7 +107,7 @@ function removePlayer(socket) {
 }
 
 io.on('connection', function (socket) {
-  addPlayer(socket, function () {
+	addPlayer(socket);
       socket.on('send action', function (data) {
         console.log("Received action: " + data)
         processAction(socket,data);
@@ -120,5 +119,4 @@ io.on('connection', function (socket) {
       socket.on('victory', function () {
         console.log("YAY");
       });
-  });
 });

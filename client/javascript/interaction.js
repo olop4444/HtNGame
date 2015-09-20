@@ -59,7 +59,6 @@ function checkKey(e) {
 			action["playerNum"] = playerNumber;
 			action["direction"] = dir;
 
-			console.log(action);
 			socket.emit("send action", action);
 		} else {
 			canMove = true;

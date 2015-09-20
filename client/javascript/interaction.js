@@ -133,7 +133,7 @@ function requestReset() {
 }
 
 function requestNewGame() {
-	socket.emit('request new game');
+	socket.emit('request new game', difficulty);
 }
 
 function reset() {

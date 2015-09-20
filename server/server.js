@@ -68,22 +68,7 @@ function addPlayer(socket, difficulty) {
 	    socket.emit("player number", index);
     });
 
-    var width, height, pathdiff;
-    if(difficulty == 0){
-        width = height = 10;
-        pathdiff = 14;
-    }else if(difficulty == 1){
-        width = height = 15;
-        pathdiff = 19;
-    }else if(difficulty == 2){
-        width = height = 20;
-        pathdiff = 27;
-    }else if(difficulty == 3){
-        width = height = 20;
-        pathdiff = 10000;
-    }
-
-    generateMap(width, height, pathdiff, function(map){
+    generateMap(difficulty, function(map){
         io.to(nextRoomId).emit("map", map);
         nextRoomId++;
         waitingSockets[difficulty] = [];
@@ -91,12 +76,27 @@ function addPlayer(socket, difficulty) {
   }
 }
 
-function generateMap(width, height, difficulty, callback) {
+function generateMap(difficulty, callback) {
 	var exec = require('child_process').exec, 
       child;
 	var map;
 
-	child = exec('./a.out ' + width + ' ' + height + ' ' + difficulty, 
+    var width, height, pathdiff;
+    if(difficulty == 0){ // easy
+        width = height = 10;
+        pathdiff = 14;
+    }else if(difficulty == 1){ // medium
+        width = height = 15;
+        pathdiff = 19;
+    }else if(difficulty == 2){ // hard
+        width = height = 20;
+        pathdiff = 27;
+    }else if(difficulty == 3){ // intense
+        width = height = 20;
+        pathdiff = 10000;
+    }
+
+	child = exec('./a.out ' + width + ' ' + height + ' ' + pathdiff, 
     function (error, stdout, stderr) {
         if(stderr.length > 0)
           console.log('stderr:', stderr);
@@ -125,8 +125,8 @@ function resetRequest(socket) {
 	io.to(socket.roomId).emit('reset');
 }
 
-function newGame(socket) {
-	generateMap(15, 15, 18, function(map){
+function newGame(socket, difficulty) {
+	generateMap(difficulty, function(map){
         io.to(socket.roomId).emit("map", map);
     });
 }
@@ -148,9 +148,9 @@ io.on('connection', function (socket) {
 		console.log("reset requested");
 		resetRequest(socket);
 	  });
-	  socket.on('request new game', function () {
-		console.log("new game requested");
-		newGame(socket);
+	  socket.on('request new game', function (difficulty) {
+		console.log("new game requested (difficulty=" + difficulty + ")");
+		newGame(socket, difficulty);
 	  });
       socket.on('victory', function () {
         console.log("victory");
